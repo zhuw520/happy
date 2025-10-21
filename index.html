@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导航网站 - 作者zhu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 落叶容器 */
+        .leaves-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+        
+        .leaf {
+            position: absolute;
+            top: -50px;
+            font-size: 24px;
+            opacity: 0.7;
+            animation-name: fall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.7;
+            }
+            80% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+            animation: shake 3s ease-in-out infinite;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+        }
+        
+        .site-info {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .author-info {
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .music-section {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 20px auto;
+            max-width: 300px;
+            box-sizing: border-box;
+        }
+        
+        .music-title {
+            color: #1a237e;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        
+        .music-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+        }
+        
+        .music-link {
+            color: #1a237e;
+            padding: 4px 6px;
+            text-decoration: none;
+            font-size: 10px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .music-link:hover {
+            background: rgba(255,255,255,0.4);
+            transform: translateY(-2px);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .nav-button {
+            padding: 12px 25px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        
+        .nav-button:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .category {
+            margin: 40px 0;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        
+        .category-desc {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .sites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .site-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .site-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 霓虹渐变标题样式 */
+        .neon-title-container {
+            position: relative;
+            display: inline-block;
+            perspective: 500px;
+            transform-style: preserve-3d;
+        }
+        
+        .neon-title-main {
+          font-weight: bold; /* 添加这一行 */
+            font-size: 20px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #a7c0fd, #c2e9fb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 300% 300%;
+            animation: neonGradient 4s ease infinite;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .neon-title-reflection {
+          font-weight: bold; /* 添加这一行 */
+            font-size: 20px;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #a7c0fd, #c2e9fb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            opacity: 0.4;
+            transform: scaleY(-1) skewX(20deg);
+            transform-origin: top;
+            filter: blur(1px);
+            z-index: 1;
+        }
+        
+        @keyframes neonGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .site-card p {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .site-card a {
+            display: inline-block;
+            padding: 8px 15px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .site-card a:hover {
+            background: #2980b9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .agreement-btn {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+        
+        .agreement-btn:hover {
+            background: #2980b9;
+        }
+        
+        .agreement-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            text-align: left;
+            margin-top: 15px;
+            padding: 0 15px;
+        }
+        
+        .agreement-content.show {
+            max-height: 500px;
+            padding: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-button {
+                width: 80%;
+                text-align: center;
+            }
+            
+            .sites-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            /* 移动端减少落叶数量 */
+            .leaf {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 落叶容器 -->
+    <div class="leaves-container" id="leavesContainer"></div>
+    
+    <div class="container">
+        <header id="home">
+            <h1>🛳️导航网站</h1>
+            <p class="site-info">此导航网站作者为zhu，自2025年10月21日运行至现在
+                 由于域名时常变动，有些时可能访问不了，作者发现后及时处理</p>
+            <p class="author-info">联系作者QQ: 2745994601</p>
+        </header>
+        
+        <div class="music-section">
+            <div class="music-title">🎵 音乐(部署在github可能无法播放)</div>
+            <div class="music-grid">
+                <a href="https://music.163.com/song/media/outer/url?id=552194857.mp3" target="_blank" class="music-link">花之舞</a>
+                <a href="https://music.163.com/song/media/outer/url?id=443292374.mp3" target="_blank" class="music-link">天空之城</a>
+                <a href="https://music.163.com/song/media/outer/url?id=2690846063.mp3" target="_blank" class="music-link">夏日专属</a>
+                <a href="https://music.163.com/song/media/outer/url?id=2724235822.mp3" target="_blank" class="music-link">dj幻昼</a>
+                <a href="https://music.163.com/song/media/outer/url?id=2682990729.mp3" target="_blank" class="music-link">爱哎唉</a>
+                <a href="https://music.163.com/song/media/outer/url?id=1929429105.mp3" target="_blank" class="music-link">一天一天</a>
+                <a href="https://music.163.com/song/media/outer/url?id=1466931525.mp3" target="_blank" class="music-link">swagger🤕</a>
+                <a href="https://music.163.com/song/media/outer/url?id=1937111077.mp3" target="_blank" class="music-link">叶隙间洒落的阳光</a>
+                <a href="https://music.163.com/song/media/outer/url?id=2731743161.mp3" target="_blank" class="music-link">你离开的事实</a>
+                <a href="https://music.163.com/song/media/outer/url?id=2066273111.mp3" target="_blank" class="music-link">normal</a>
+                <a href="https://music.163.com/song/media/outer/url?id=2607318607.mp3" target="_blank" class="music-link">planet</a>
+            </div>
+        </div>
+        
+        <div class="nav-buttons">
+            <a id="homeBtn" class="nav-button">首页</a>
+            <a id="projectBtn" class="nav-button">项目</a>
+            <a id="serviceBtn" class="nav-button">服务</a>
+            <a href="https://qm.qq.com/q/pey4opIljy" target="_blank" class="nav-button">联系</a>
+        </div>
+        
+        <div id="projects" class="category">
+            <h2>GO/js/Python项目</h2>
+            <p class="category-desc">项目和服务</p>
+            <div class="sites-grid">
+                <div class="site-card">
+                    <div class="neon-title-container">
+                        <div class="neon-title-main">Github个人网站</div>
+                        <div class="neon-title-reflection">❤️❤️❤❤️❤️</div>
+                    </div>
+                    <p>乱写的，下面聊天室由于我的GO语言版本聊天室已经很完善，所以我抛弃了js版，但性能相当</p>
+                    <a href="https://zhuw520.github.io/My-Java/" target="_blank">访问网站</a>
+                </div>
+                <div class="site-card">
+                    <div class="neon-title-container">
+                        <div class="neon-title-main">普通聊天室</div>
+                        <div class="neon-title-reflection">普通聊天室</div>
+                    </div>
+                    <p>普通的聊天室(GO构成)</p>
+                    <a href="https://june-jokes-grace-pays.trycloudflare.com" target="_blank">访问网站</a>
+                </div>
+                <div class="site-card">
+                    <div class="neon-title-container">
+                        <div class="neon-title-main">AI聊天室</div>
+                        <div class="neon-title-reflection">AI聊天室</div>
+                    </div>
+                    <p>AI聊天室，使用Python监听api接口，可以与不太智能的机器人互动(GO+ Python构成)</p>
+                    <a href="https://united-networking-units-precipitation.trycloudflare.com" target="_blank">访问网站</a>
+                </div>
+                <div class="site-card">
+                    <div class="neon-title-container">
+                        <div class="neon-title-main">媒体聊天室</div>
+                        <div class="neon-title-reflection">媒体聊天室</div>
+                    </div>
+                    <p>媒体聊天室，可以发送图片-视频-音频。大小不得超过8MB，否则你的界面可能会发生bug(GO构成)</p>
+                    <a href="https://marion-haven-brief-begun.trycloudflare.com" target="_blank">访问网站</a>
+                </div>
+                  <div class="site-card">
+                    <div class="neon-title-container">
+                        <div class="neon-title-main">网页论坛</div>
+                        <div class="neon-title-reflection">网页论坛</div>
+                    </div>
+                    <p>网页论坛，可以进来发帖(GO构成)</p>
+                    <a href="https://migration-aid-lighter-exactly.trycloudflare.com" target="_blank">访问网站</a>
+                </div>
+                  <div class="site-card">
+                    <div class="neon-title-container">
+                        <div class="neon-title-main">文件托管服务</div>
+                        <div class="neon-title-reflection">文件托管服务</div>
+                    </div>
+                    <p>可以生成一个临时的文件链接，最大0.78MB(GO构成)</p>
+                    <a href="https://shortly-dubai-crm-enters.trycloudflare.com" target="_blank">访问网站</a>
+                </div>
+                  <div class="site-card">
+                    <div class="neon-title-container">
+                        <div class="neon-title-main">音乐网站</div>
+                        <div class="neon-title-reflection">音乐网站</div>
+                    </div>
+                    <p>随便做的(GO构成)</p>
+                    <a href="https://decided-interesting-ends-element.trycloudflare.com" target="_blank">访问网站</a>
+                </div>
+            </div>
+        </div>
+        
+        <div id="services" class="category">
+            <h2>我们的服务</h2>
+            <p class="category-desc">提供全方位的网络服务解决方案</p>
+            <div class="sites-grid">
+                <div class="site-card">
+                    <div class="neon-title-container">
+                        <div class="neon-title-main">网站开发</div>
+                        <div class="neon-title-reflection">网站开发</div>
+                    </div>
+                    <p>专业的网站开发服务，满足您的各种需求，有作者写的后端源码</p>
+                    <a href="https://zhuw520.github.io/dm/" target="_blank">访问网站</a>
+                </div>
+                <div class="site-card">
+                    <div class="neon-title-container">
+                        <div class="neon-title-main">UI设计←原创字体</div>
+                        <div class="neon-title-reflection">UI设计</div>
+                    </div>
+                    <p>美观实用的用户界面设计，提升用户体验。</p>
+                    <a href="#" target="_blank">作者懒得写</a>
+                </div>
+                <div class="site-card">
+                    <div class="neon-title-container">
+                        <div class="neon-title-main">技术咨询(查IP)</div>
+                        <div class="neon-title-reflection">技术咨询(查IP)</div>
+                    </div>
+                    <p>专业的技术咨询服务，解决您的技术难题。作者写的网站里ip查询就是用的这个api</p>
+                    <a href="http://ip-api.com/" target="_blank">访问网站</a>
+                </div>
+                <div class="site-card">
+                    <div class="neon-title-container">
+                        <div class="neon-title-main">维护支持</div>
+                        <div class="neon-title-reflection">维护支持</div>
+                    </div>
+                    <p>持续的维护和技术支持服务，保障系统稳定运行。</p>
+                    <a href="#" target="_blank">作者懒得写</a>
+                </div>
+                     <div class="site-card">
+                    <div class="neon-title-container">
+                        <div class="neon-title-main">百度网址安全中心</div>
+                        <div class="neon-title-reflection">百度网址安全中心</div>
+                    </div>
+                    <p>看看我的网址安不安全</p>
+                    <a href="https://bsb.baidu.com/diagnosis?s_cap=https://www.cloudflare-cn.com/&svcp_stk=1_vq0T95q5sTmRywkOpnYY1_R8h6hEQdEMERBtI_y-YTKPn6cK6ve0RN5GfCpSd_faG7PFHX52LnGgktuCclXwcGGc3USjGG_ToY3WZBq1tf9HGK4S8p0fHKrKWl5QMNunuCfj4Zicshd2-CsRTM_4NtLXXQp3krtivoisBXSdU53JLd6LVZSqyCzh9DjTmzon" target="_blank">访问网站</a>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>感谢您访问本导航网站！</p>
+            <p>如有问题请联系作者。</p>
+            <button class="agreement-btn" id="agreementBtn">用户协议</button>
+            <div class="agreement-content" id="agreementContent">
+                <h3>用户协议</h3>
+                <p>1. 严禁对本平台进行任何形式的网络攻击、漏洞扫描或DDoS攻击</p>
+                <p>2. 用户在使用本站提供的服务时，应遵守相关法律法规。</p>
+                <p>3. 不得利用平台进行任何违法或侵犯他人权益的活动</p>
+                <p>4. 如用户发布违法信息，产生的一切法律后果由用户自行承担</p>
+                <p>5. 禁止尝试破坏服务稳定性、篡改数据或进行未授权访问</p>
+                <p>6. 严禁盗用，所有网站代码版权归作者所有</p>
+                <p>7. 如果您不同意本协议的任何条款，请立即停止使用本站服务</p>
+                <p>Copyright © ZHU. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('agreementBtn').addEventListener('click', function() {
+            const content = document.getElementById('agreementContent');
+            content.classList.toggle('show');
+        });
+        
+        // 导航按钮功能
+        document.getElementById('homeBtn').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        document.getElementById('projectBtn').addEventListener('click', function() {
+            const projects = document.getElementById('projects');
+            projects.scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+        
+        document.getElementById('serviceBtn').addEventListener('click', function() {
+            const services = document.getElementById('services');
+            services.scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+        
+        // 落叶效果
+        function createLeaves() {
+            const leavesContainer = document.getElementById('leavesContainer');
+            const leafCount = 15; // 落叶数量
+            
+            for (let i = 0; i < leafCount; i++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf';
+                leaf.innerHTML = '🍁';
+                
+                // 随机位置
+                const left = Math.random() * 100;
+                
+                // 随机动画参数
+                const duration = 10 + Math.random() * 20; // 10-30秒
+                const delay = Math.random() * 5; // 0-5秒延迟
+                const sway = 50 + Math.random() * 100; // 50-150px水平摆动
+                
+                // 设置样式
+                leaf.style.left = `${left}%`;
+                leaf.style.animationDuration = `${duration}s`;
+                leaf.style.animationDelay = `${delay}s`;
+                
+                // 添加摇摆效果
+                leaf.style.setProperty('--sway', `${sway}px`);
+                
+                leavesContainer.appendChild(leaf);
+            }
+        }
+        
+        // 页面加载完成后创建落叶
+        window.addEventListener('DOMContentLoaded', createLeaves);
+    </script>
+</body>
+</html>
